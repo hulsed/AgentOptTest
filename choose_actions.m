@@ -42,16 +42,24 @@ function actions = choose_actions(agents, exploration)
                 [~, bestAction] = max(agent);
                 actions(ag) = bestAction;
             end
-        else % if softmax
+        else
             p = zeros(1, numel(agent));
             if strcmp(exploration.mode, 'softmaxDecay')
                 b=log(exploration.tempMin/exploration.tempMax);
                 T = exploration.tempMax * exp(b * exploration.completion); % Temperature
-            else
+            elseif strcmp(exploration.mode, 'softmax')
                 T = exploration.tempConst; % Temperature
+            elseif strcmp(exploration.mode, 'softmaxAdaptiveExp')
+                b=log(exploration.biasMin/exploration.biasMax);
+                bias=exploration.biasMax*exp(b*exploration.completion);
+             elseif strcmp(exploration.mode, 'softmaxAdaptiveLin')
+                bias=exploration.biasMax-exploration.completion*(exploration.biasMax-exploration.biasMin);
             end
             % iterate through possible actions for agent
             for a = 1:numel(agent)
+                if strcmp(exploration.mode, 'softmaxAdaptiveLin') || strcmp(exploration.mode, 'softmaxAdaptiveExp')
+                    T=abs(max(agent))*bias;
+                end
                 p(a) = exp(agent(a)/T);
             end
             s = sum(p);
@@ -79,7 +87,7 @@ function actions = choose_actions(agents, exploration)
             if exploration.completion==1
                 [~,actionToTake]=max(agent);
             end
-            actions(ag) = actionToTake;   
+            actions(ag) = actionToTake;            
         end
     end
 end
