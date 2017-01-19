@@ -8,12 +8,18 @@
 
 % OUTPUTS
 % The agents with updated Q-tables
-function agents = update_values(agents, rewards, actions, alpha)
+function agents = update_values(agents, rewards, actions, alpha,learnmode)
     % Iterate through agents
     for ag = 1:numel(agents)
         % Get the current value of the action that agent ag took
         Va = agents{ag}(actions(ag));
         % Update the value of the action
+        switch learnmode
+            case 'best'
+        agents{ag}(actions(ag)) = max(rewards(ag), Va);
+            case 'rl'
         agents{ag}(actions(ag)) = Va + alpha*(rewards(ag) - Va);
+        end
+        
     end
 end

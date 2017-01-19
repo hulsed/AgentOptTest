@@ -11,12 +11,11 @@ exploration.tempMax=10000;
 exploration.biasMin=0.05;
 exploration.biasMax=1;
 
-learnmode='best' %or 'rl'
 
 params = [0.1, 0.5, 1, 1];
-Qinit= 500;
+Qinit= 200;
 myMode=6;
-useD=0;
+useD=1;
 
 alpha=0.1;
 numEpochs=100;
@@ -68,12 +67,12 @@ for e=1:numEpochs
    
    set(loc_agent, 'Xdata',x1, 'Ydata',x2)
    drawnow
-   %pause(0.5)
+   %pause(1)
    
    rewards=compute_rewards(useD,x1,x2,var1,var2, func);
    reward_hist(e,:)=rewards;
    G(r,e)=func(x1,x2);
-   agents=update_values(agents,rewards,actions,alpha,learnmode);
+   agents=update_values(agents,rewards,actions,alpha);
    set(agent1plot,'Ydata',agents{1});
    drawnow
    set(agent2plot,'Ydata',agents{2});

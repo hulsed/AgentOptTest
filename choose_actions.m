@@ -56,9 +56,13 @@ function actions = choose_actions(agents, exploration)
                 bias=exploration.biasMax-exploration.completion*(exploration.biasMax-exploration.biasMin);
             end
             % iterate through possible actions for agent
+            
+            
+                %agent=(agent-min(agent))/(max(agent)-min(agent)+0.001);
+                %agent=(agent-mean(agent))/(std(agent)+0.01);
             for a = 1:numel(agent)
                 if strcmp(exploration.mode, 'softmaxAdaptiveLin') || strcmp(exploration.mode, 'softmaxAdaptiveExp')
-                    T=abs(max(agent))*bias;
+                    T=(mean(abs(agent))+0.1)*bias;
                 end
                 p(a) = exp(agent(a)/T);
             end
