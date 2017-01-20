@@ -60,11 +60,12 @@ function actions = choose_actions(agents, exploration)
             
                 %agent=(agent-min(agent))/(max(agent)-min(agent)+0.001);
                 %agent=(agent-mean(agent))/(std(agent)+0.01);
+                agent2=1./(1+exp(-(agent-mean(agent))/(std(agent)+0.1)));
             for a = 1:numel(agent)
                 if strcmp(exploration.mode, 'softmaxAdaptiveLin') || strcmp(exploration.mode, 'softmaxAdaptiveExp')
-                    T=(mean(abs(agent))+0.1)*bias;
+                    T=(mean(abs(agent2))+0.1)*bias;
                 end
-                p(a) = exp(agent(a)/T);
+                p(a) = exp(agent2(a)/T);
             end
             s = sum(p);
             for a = 1:numel(agent)

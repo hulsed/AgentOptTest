@@ -14,7 +14,7 @@ exploration.biasMax=1;
 learnmode='best' %or 'rl'
 
 params = [0.1, 0.5, 1, 1];
-Qinit= 500;
+Qinit= -10000;
 myMode=6;
 useD=0;
 
@@ -36,10 +36,10 @@ var1=linspace(x1min, x1max,var1choices);
 var2=linspace(x2min, x2max,var2choices);
 
 %func=@(x1,x2) 100-((x1-5).^2+(x2-5).^2);
-func=@(x1,x2) 1000-((1-x1).^2+100*(x2-x1.^2).^2);
+func=@(x1,x2) -((1-x1).^2+100*(x2-x1.^2).^2);
 [Var1,Var2]=meshgrid(var1,var2);
 %funcv=((Var1-5).^2+(Var2-5).^2);
-funcv=1000-((1-Var1).^2+100*(Var2-Var1.^2).^2);
+funcv=-((1-Var1).^2+100*(Var2-Var1.^2).^2);
 subplot(2,2,1)
 contour(Var1,Var2,funcv)
 hold on
